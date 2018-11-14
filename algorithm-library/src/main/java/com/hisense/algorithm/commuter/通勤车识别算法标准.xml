@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<algorithm>
+	<!--必填：算法的运行主要是在spark平台，前期为了支持成交现有算法 -->
+	<platform>spark</platform>
+	<!--必填：算法运行的主类名称，任务运行的时候使用 -->
+	<classname>WeatherAccident</classname>
+	<!--必填：数据源配置 -->
+	<datasource>
+		<!--必填：描述数据源，具体数据源地址运行时选择 -->
+		<datasource_detail>
+			<!--必填：数据源中文名，便于在平台展示 -->
+			<datasource_name_cn>过车信息</datasource_name_cn>
+			<!--必填：数据源英文名，便于为算法传参使用 -->
+			<datasource_name_en>TD_VEHICLE_RECORD_DAY</datasource_name_en>
+			<!--指定该数据源的类型，数据由算法本身去读，因此类型是固定的，类型包括如下：relational_database、hdfs、kafka、redis -->
+			<type>relational_database</type>
+			<!--必填：需要在平台端展示给用户，提示输入格式，这里格式暂不做程序验证 -->
+			<desc>使用的数据源为过车信息表(TD_VEHICLE_RECORD_DAY)，使用了中间表
+				通勤车聚类数据表(TM_VEHICLE_SCORES)，以及结果表通勤车识别结果表(AV_VEHICLE_RESULTS)</desc>
+		</datasource_detail>
+	</datasource>
+	<!--可选：中间结果输出配置 -->
+	<inter_result>
+		<!--可选：规定中间结果输出地址，具体地址运行配置时选择，具体规定同数据源配置 -->
+		<inter_result_detail>
+			<inter_result_name_cn>通勤车聚类数据表</inter_result_name_cn>
+			<inter_result_name_en>TM_VEHICLE_SCORES</inter_result_name_en>
+			<!--指定该数据源的类型，类型包括如下：relational_database、hdfs、kafka、redis -->
+			<type>relational_database</type>
+			<desc>通勤车聚类数据表，第一列是车牌号，第二列是早晚高峰频次，第三列是平峰频次，第四列是早晚高峰概率</desc>
+		</inter_result_detail>
+	</inter_result>
+	<!--必选：最终结果输出配置 -->
+	<output>
+		<!--输出地址，具体地址和类型运行时选择 -->
+		<output_detail>
+			<output_name_cn>通勤车识别结果表</output_name_cn>
+			<output_name_en>AV_VEHICLE_RESULTS</output_name_en>
+			<!--指定该数据源的类型，类型包括如下：relational_database、hdfs、kafka、redis -->
+			<type>relational_database</type>
+			<desc>通勤车识别结果表，第一列是车牌号，第二列是早晚高峰频次，第三列是平峰频次，第四列是早晚高峰概率</desc>
+		</output_detail>
+	</output>
+	<!--必选：描述算法的处理数据与处理逻辑 -->
+	<algorithm_desc>
+		算法本身的描述
+		1  聚类变量
+		早晚高峰车辆使用频度：指一个自然日内，如果车辆在早高峰或晚高峰时段内被车牌识别系统检测到，该车辆的使用频度为
+		1（一天内检测到一次就记录为1）。例如在一个月30天内，使用频度为3则代表车辆在30天内早高峰和晚高峰使用3次（一个月内检测到的次数为n）。
+		平峰车辆使用频度：指一个自然日内，如果车辆在平峰时段内被车牌识别系统检测到，该车辆的使用频度为1。例如在一个月30天内，使用频度为3则代表车辆在30天内平峰时段使用3次。
+		车辆日在途时长：指一个自然日内，车辆在道路上的行驶时间。
+		根据通勤车辆的交通特征，选取如下3个聚类变量：
+		V1：工作日早晚高峰车辆使用频度；
+		V2：工作日平峰车辆使用频度；
+		V3：工作日早晚高峰车辆出险概率。
+		2  采用最大最小距离法确定聚类中心及聚类数K
+		将样本X={x_1 〖，x〗_(2，) x_3…x_m}对应的变量数据进行归一化处理。
+		从样本X={x_1 〖，x〗_(2，) x_3…x_m}中选取距离所有样本中心(均值)最近的一个样本作为第一个初始聚类中心 z_1。
+		从X中找出x_i（i=1,2,3…m）使z_1与x_i两者之间的距离d_((z_1,x_i))最大，记z_2=x_i。(取一个距离中心距离最大的点)
+		分别计算X中剩余的样本到z_1和z_2的距离d_j1
+		〖和d〗_j2（其中d_j1表示x_i与z_1之间的距离），取d_a=max⁡{min⁡(d_j1,d_j2)},j=1,2,…m，若d_a>θ*d_12（其中d_12表示z_1
+		与z_2之间的距离，θ取值为0.5），则取z_3=x_j。
+		若z_3不存在，聚类中心寻找结束；若z_3存在，则计算d_b=max⁡{min⁡(d_g1,d_g2,d_g3)}，g=1,2,…m，若d_b>θ*d_12，则z_4=x_g，以此类推，直到最大距离与最小距离大于θ*d_12，聚类中心寻找结束。
+		3    聚类结果分析
+		通过对聚类结果进行分析，识别出具有早晚高峰使用频度高、平峰使用频度低、早晚高峰第一次出行位置相对稳定特征的通勤车辆
+		聚类中心：Z={z_1 〖，z〗_(2，) z_3…z_k}；
+		各聚类中心对应的三个聚类变量为：V={v_j1 〖，v〗_(j2，) v_j3},j=1,2,…k；
+		通勤车辆识别过程：
+		将K个中心对应的特征第一个特征变量（工作日早晚高峰车辆使用频度）按照降序进行排列，记录各聚类中心对应的排列名词Y_1={y_11 〖，y〗_12，…y_1k}；
+		将K个中心对应的特征第二个特征变量（工作日平峰车辆使用频度；）按照升序进行排列，记录各聚类中心对应的排列名词Y_2={y_21
+		〖，y〗_22，…y_2k}；
+		将K个中心对应的特征第三个特征变量（工作日车辆早晚高峰时段在第1次检测断面位置的出现概率）按照降序进行排列，记录各聚类中心对应的排列名词Y_3={y_31
+		〖，y〗_32，…y_3k}；
+		将K个聚类中心对应的聚类变量名次相加求和，即Y ={y_11+y_21+y_3 〖，y〗_12+y_22+y_32，…y_1k+y_2k+y_3k}；
+		min(y_11+y_21+y_3 〖，y〗_12+y_22+y_32，…y_1k+y_2k+y_3k)
+		对应的类为包含通勤车辆的类，若存在两个最小值，则取较小y_1i对应的类为通勤车辆对应的类。
+
+	</algorithm_desc>
+</algorithm>

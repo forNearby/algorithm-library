@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<algorithm>
+	<!--必填：算法的运行主要是在spark平台，前期为了支持成交现有算法 -->
+	<platform>spark</platform>
+	<!--必填：算法运行的主类名称，任务运行的时候使用 -->
+	<classname>WeatherAccident</classname>
+	<!--必填：数据源配置 -->
+	<datasource>
+		<!--必填：描述数据源，具体数据源地址运行时选择 -->
+		<datasource_detail>
+			<!--必填：数据源中文名，便于在平台展示 -->
+			<datasource_name_cn>过车信息</datasource_name_cn>
+			<!--必填：数据源英文名，便于为算法传参使用 -->
+			<datasource_name_en>TD_VEHICLE_RECORD_DAY</datasource_name_en>
+			<!--指定该数据源的类型，数据由算法本身去读，因此类型是固定的，类型包括如下：relational_database、hdfs、kafka、redis -->
+			<type>relational_database</type>
+			<!--必填：需要在平台端展示给用户，提示输入格式，这里格式暂不做程序验证 -->
+			<desc>使用的数据源为过车信息表(TD_VEHICLE_RECORD_DAY)，以及每天的车辆出行数量及占比表(AV_VEHICLE_DAY_RATIO_RESULTS)</desc>
+		</datasource_detail>
+	</datasource>
+	<!--可选：算法运行所需参数配置 -->
+	<operational_param>
+		<!--参数类型包括3种，每个算法包含的参数数量和类型任选，参数名称不能重复 -->
+		<operational_param_detail>
+			<!--单一数或者值，运行的时候统一以字符串的形式传递给算法 -->
+			<type></type>
+			<!--自行设置参数中文名，为了展示给算法配置者 -->
+			<param_name_cn></param_name_cn>
+			<!--自行设置参数英文名，为了传参的时候作为key -->
+			<param_name_en></param_name_en>
+			<!--参数格式示例，出现在填写该字段的提示框中 -->
+			<format_example></format_example>
+		</operational_param_detail>
+		<operational_param_detail>
+			<!--范围参数，表示参数范围限制在(N,M] -->
+			<type></type>
+			<!--参数中文名是为了展示给算法配置者 -->
+			<param_name_cn></param_name_cn>
+			<!--参数英文名是为了传参的时候作为key -->
+			<param_name_en></param_name_en>
+			<!--左边界参数格式示例 -->
+			<format_example_left></format_example_left>
+			<!--右边界参数格式示例 -->
+			<format_example_right></format_example_right>
+		</operational_param_detail>
+		<operational_param_detail>
+			<!--枚举类型 -->
+			<type></type>
+			<!--参数中文名是为了展示给算法配置者 -->
+			<param_name_cn></param_name_cn>
+			<!--参数英文名是为了传参的时候作为key -->
+			<param_name_en></param_name_en>
+			<!--枚举可选值，可以是数字、字符串等任意形式 -->
+			<enum_value></enum_value>
+			<enum_value></enum_value>
+			<enum_value></enum_value>
+			<enum_value></enum_value>
+			<enum_value></enum_value>
+		</operational_param_detail>
+	</operational_param>
+	<!--可选：中间结果输出配置 -->
+	<inter_result>
+		<!--可选：规定中间结果输出地址，具体地址运行配置时选择，具体规定同数据源配置 -->
+		<inter_result_detail>
+			<inter_result_name_cn></inter_result_name_cn>
+			<inter_result_name_en></inter_result_name_en>
+			<!--指定该数据源的类型，类型包括如下：relational_database、hdfs、kafka、redis -->
+			<type></type>
+			<desc></desc>
+		</inter_result_detail>
+	</inter_result>
+	<!--必选：最终结果输出配置 -->
+	<output>
+		<!--输出地址，具体地址和类型运行时选择 -->
+		<output_detail>
+			<output_name_cn>车辆出行数量及占比表</output_name_cn>
+			<output_name_en>AV_VEHICLE_DAY_RATIO_RESULTS</output_name_en>
+			<!--指定该数据源的类型，类型包括如下：relational_database、hdfs、kafka、redis -->
+			<type>relational_database</type>
+			<desc>车辆出行数量及占比表，第一列是日期，第二列是车辆占比，第三列是车辆数量</desc>
+		</output_detail>
+	</output>
+	<!--必选：描述算法的处理数据与处理逻辑 -->
+	<algorithm_desc>
+		算法本身的描述
+		(1) 基于过车数据表计算单个时间周期内路网内出现的车辆数，每辆车仅被统计一次（去重）。
+		(2)计算每辆车的出行天数，车辆每天被检测到1次即认为车辆在该天内出行。
+		(3) 统计不同出行天数下的车辆数量及占比。
+		(这里求了每天占一个周的占比)
+	</algorithm_desc>
+</algorithm>

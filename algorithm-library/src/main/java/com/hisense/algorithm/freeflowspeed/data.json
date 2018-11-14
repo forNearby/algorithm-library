@@ -1,0 +1,30 @@
+{
+    "datasource": {
+        "TD_VEHICLE_RECORD_DAY": {
+            "database": "gxdb",
+            "database_address": "20.2.15.18",
+            "account": "JHGX",
+            "password": "JHGX001",
+            "tablename": "TD_VEHICLE_RECORD_DAY"
+        },
+        "TS_FBD_INFO": {
+            "database": "gxdb",
+            "database_address": "20.2.15.18",
+            "account": "JHGX",
+            "password": "JHGX001",
+            "tablename": "TS_FBD_INFO"
+        }
+    },
+    "operational_param": {
+        "fdb": "FBD_01C_09"
+    },
+    "output": {
+        "TS_FBD_INFO": {
+            "database": "gxdb",
+            "database_address": "20.2.15.18",
+            "account": "JHGX",
+            "password": "JHGX001",
+            "tablename": "TS_FBD_INFO"
+        }
+    }
+}

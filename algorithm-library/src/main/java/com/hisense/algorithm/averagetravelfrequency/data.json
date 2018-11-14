@@ -1,0 +1,33 @@
+{
+    "output":{
+        "AV_AVERAGE_TRAVEL_FREQUENCY":{
+            "database_address":"20.2.15.18",
+            "password":"Yus5wcdW",
+            "database":"sfdb",
+            "tablename":"AV_AVERAGE_TRAVEL_FREQUENCY",
+            "account":"sfdb_dev"
+        }
+    },
+    "operational_param":{
+        "areaid":"41"
+    },
+    "datasource":{
+        "TS_DEVICE":{
+            "database_address":"20.2.15.18",
+            "password":"JHGX001",
+            "database":"gxdb",
+            "tablename":"TS_DEVICE",
+            "account":"JHGX"
+        },
+        "TD_VEHICLE_RECORD_DAY":{
+            "database_address":"20.2.15.18",
+            "password":"JHGX001",
+            "database":"gxdb",
+            "tablename":"TD_VEHICLE_RECORD_DAY",
+            "account":"JHGX"
+        }
+    },
+    "inter_result":{
+
+    }
+}

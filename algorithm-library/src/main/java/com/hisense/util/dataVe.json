@@ -1,0 +1,46 @@
+{
+  "datasource": {
+    "TD_VEHICLE_RECORD_DAY": {
+      "database": "gxdb",
+      "database_address": "20.2.15.18",
+      "port":"1521",
+      "account": "JHGX",
+      "password": "JHGX001",
+      "tablename": "TD_VEHICLE_RECORD_DAY"
+    }
+  },
+  "operational_param": {
+    "model": "CongestionIdentification",
+    "roadid": "u3333"
+  },
+  "output": {
+    "AV_VEHICLE_RESULTS": {
+      "database": "gxdb",
+      "database_address": "20.2.15.18",
+      "port":"1521",
+      "account": "JHGX",
+      "password": "JHGX001",
+      "tablename": "AV_VEHICLE_RESULTS"
+    }
+    ,
+    "TM_VEHICLE_SCORES": {
+     "database": "gxdb",
+      "database_address": "20.2.15.18",
+      "port":"1521",
+      "account": "JHGX",
+      "password": "JHGX001",
+      "tablename": "TM_VEHICLE_SCORES"
+    },
+    "AV_VEHICLE_DAY_RATIO_RESULTS": {
+      "database": "gxdb",
+      "database_address": "20.2.15.18",
+      "port":"1521",
+      "account": "JHGX",
+      "password": "JHGX001",
+      "tablename": "AV_VEHICLE_DAY_RATIO_RESULTS"
+    }
+  },
+  "spark_info": {
+    "master": "local"
+  }
+}

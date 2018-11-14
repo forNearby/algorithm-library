@@ -1,0 +1,22 @@
+{
+  "datasource": {
+    "road_info": {
+      "database": "hiatmp",
+      "database_address": "192.168.0.108",
+      "account": "jhgx",
+      "password": "jhgx",
+      "port": "1521",
+      "tablename": "td_road_status"
+    }
+  },
+  "output": {
+    "result_info": {
+      "database": "hiatmp",
+      "database_address": "192.168.0.108",
+      "account": "jhgx",
+      "password": "jhgx",
+      "port": "1521",
+      "tablename": "AR_JAMROAD"
+    }
+  }
+}
